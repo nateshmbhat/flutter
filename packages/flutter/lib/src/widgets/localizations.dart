@@ -44,16 +44,15 @@ Future<Map<Type, dynamic>> _loadAll(Locale locale, Iterable<LocalizationsDelegat
 
   // Only load the first delegate for each delegate type that supports
   // locale.languageCode.
-  
-//  NUCLEI CHANGE HERE  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+  final Set<Type> types = <Type>{};
   final List<LocalizationsDelegate<dynamic>> delegates = <LocalizationsDelegate<dynamic>>[];
   for (LocalizationsDelegate<dynamic> delegate in allDelegates) {
-    if (delegate.isSupported(locale)) {
+    if (!types.contains(delegate.type) && delegate.isSupported(locale)) {
+      types.add(delegate.type);
       delegates.add(delegate);
     }
   }
-//  NUCLEI CHANGE HERE  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-  
+
   for (LocalizationsDelegate<dynamic> delegate in delegates) {
     final Future<dynamic> inputValue = delegate.load(locale);
     dynamic completedValue;
